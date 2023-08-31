@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-import { count } from "../count";
+import { getCount } from "../count";
 
 export const runtime = "edge"; // 'nodejs' is the default
 
@@ -10,7 +10,7 @@ export function GET(request: NextRequest) {
   const body = new ReadableStream({
     start(controller) {
       timer = setInterval(() => {
-        const msg = `count: ${count}\n`;
+        const msg = `count: ${getCount()}\n`;
         controller.enqueue(new TextEncoder().encode(msg));
       }, 1000);
     },
