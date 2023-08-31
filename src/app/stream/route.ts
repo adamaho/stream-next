@@ -13,6 +13,7 @@ export function GET(request: NextRequest) {
       }, 1000);
     },
     cancel() {
+      console.log("client disconnected");
       clearInterval(timer);
     },
   });
