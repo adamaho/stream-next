@@ -5,18 +5,19 @@ import { getCount } from "../count";
 
 export const runtime = "edge"; // 'nodejs' is the default
 
-export function GET(request: NextRequest) {
-  let timer: NodeJS.Timeout;
+export function GET() {
+  const bc = new BroadcastChannel("count");
   const body = new ReadableStream({
     start(controller) {
-      timer = setInterval(() => {
-        const msg = `count: ${getCount()}\n`;
+      bc.addEventListener("message", (count) => {
+        const msg = `count: ${count}\n`;
+        console.log("message recieved", count);
         controller.enqueue(new TextEncoder().encode(msg));
-      }, 1000);
+      });
     },
     cancel() {
+      bc.close();
       console.log("client disconnected");
-      clearInterval(timer);
     },
   });
 

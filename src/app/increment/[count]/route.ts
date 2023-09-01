@@ -3,10 +3,13 @@ import type { NextRequest } from "next/server";
 
 export const runtime = "edge"; // 'nodejs' is the default
 
-import { increment } from "../count";
+export function GET(
+  request: NextRequest,
+  { params }: { params: { count: number } }
+) {
+  const bc = new BroadcastChannel("count");
+  bc.postMessage(params.count);
 
-export function GET(request: NextRequest) {
-  increment();
   return new Response("incremented count", {
     headers: {
       "content-type": "text/plain",
